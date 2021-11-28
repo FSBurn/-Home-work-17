@@ -103,7 +103,6 @@ class User  {
 		this.img = human.img;
 		this.role = human.role;
 		this.courses = human.courses ? human.courses : null;
-
 	}
 	render(){
 		return `<div class="user">
@@ -118,8 +117,7 @@ class User  {
                 <div class="user__info--role ${this.role}">
                     <img src="images/roles/${this.role}.png" alt="${this.role}" height="25">
                     <p>${this.role}</p>
-                </div>
-            
+                </div>    
         </div> `
 	}
 	renderCourses(){
@@ -127,33 +125,25 @@ class User  {
 			return `<div class="user__courses">
 				${this.courses
 					.map(course => {
-						return `<p class="user__courses--course ${this.role}">${course.title}<span class="${this.getMark(course.mark)}">${this.getMark(course.mark)}</span></p>`
+						const markValue = this.getMark(course.mark)
+						return `<p class="user__courses--course ${this.role}">${course.title}<span class="${markValue}">${markValue}</span></p>`
 					}).join(``)}
 			</div>`
 		}
 		return '';
-
 	}
 	getMark(arg){
-		if(arg <= 20){
-			return this.mark = gradation["20"]
-		}else if(arg <= 55){
-			return  this.mark = gradation["55"]
-		}
-		else if(arg <= 85){
-			return  this.mark = gradation["85"]
-		}
-		else if(arg <= 100){
-			return  this.mark = gradation["100"]
-		}
+			for( let key in gradation) {
+				if(arg <= key){
+					return gradation[key]
+				}
+			}
 	}
 }
 class Student extends User{
 	constructor(human) {
 		super(human);
-
 	}
-
 }
 class Lector extends User{
 	constructor(human) {
@@ -164,48 +154,20 @@ class Lector extends User{
 			return `<div class="user__courses">
 				${this.courses
 				.map(course => {
+					const markValue = this.getMark(course.score)
+					const lectorScore = this.getMark(course.studentsScore)
 					return `<div class="user__courses admin--info">
                 <div class="user__courses--course ${this.role}">
                     <p>Title: <b>${course.title}</b></p>
-                    <p>Lector's score: <span class="${this.getScore(course.score)}">${this.getScore(course.score)}</span></p>
-                    <p>Average student's score: <span class="${this.getStudentsScore(course.studentsScore)}">${this.getStudentsScore(course.studentsScore)}</span></p>
-                </div>
-                
+                    <p>Lector's score: <span class="${markValue}">${markValue}</span></p>
+                    <p>Average student's score: <span class="${lectorScore}">${lectorScore}</span></p>
+                </div>       
             </div>`
 				}).join(`&nbsp &nbsp`)}
 			</div>`
 		}
 		return '';
-
 	}
-	getScore(arg){
-		if(arg <= 20){
-			return this.score = gradation["20"]
-		}else if(arg <= 55){
-			return  this.score = gradation["55"]
-		}
-		else if(arg <= 85){
-			return  this.score = gradation["85"]
-		}
-		else if(arg <= 100){
-			return  this.score = gradation["100"]
-		}
-	}
-	getStudentsScore(arg){
-		if(arg <= 20){
-			return this.studentsScore = gradation["20"]
-		}else if(arg <= 55){
-			return  this.studentsScore = gradation["55"]
-		}
-		else if(arg <= 85){
-			return  this.studentsScore = gradation["85"]
-		}
-		else if(arg <= 100){
-			return  this.studentsScore = gradation["100"]
-		}
-	}
-
-
 }
 class Admin extends User{
 	constructor(human) {
@@ -216,22 +178,20 @@ class Admin extends User{
 			return `<div class="user__courses">
 				${this.courses
 				.map(course => {
+					const markValue = this.getMark(course.score)
 					return `<div class="user__courses admin--info">
                 <div class="user__courses--course ${this.role}">
                     <p>Title: <b>${course.title}</b></p>
-                    <p>Admin's score: <span class="${this.getMark(course.score)}">${this.getMark(course.score)}</span></p>
+                    <p>Admin's score: <span class="${markValue}">${markValue}</span></p>
                     <p>Lector: <b>${course.lector}</b></p>
-                </div>
-                
+                </div>              
             </div>`
 				}).join(`&nbsp &nbsp`)}
 			</div>`
 		}
 		return '';
 	}
-
 }
-
 const userRole = {
 	student: human => new Student(human),
 	lector: human => new Lector(human),
