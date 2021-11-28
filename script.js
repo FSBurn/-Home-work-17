@@ -169,6 +169,7 @@ class Lector extends User{
 		return '';
 	}
 }
+
 class Admin extends User{
 	constructor(human) {
 		super(human);
